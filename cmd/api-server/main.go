@@ -6,6 +6,8 @@ import (
 	"net/http"
 	"trello-clone/internal/db"
 	"trello-clone/internal/handlers/columnHandler"
+	"trello-clone/internal/handlers/taskHandler"
+
 	"trello-clone/internal/models"
 
 	"github.com/gin-contrib/cors"
@@ -20,7 +22,7 @@ func init() {
 	}
 	fmt.Println("Initialize project")
 	db.ConnectDb()
-	db.Connection.AutoMigrate(&models.Column{})
+	db.Connection.AutoMigrate(&models.Column{}, &models.Task{})
 }
 
 func main() {
@@ -35,6 +37,9 @@ func main() {
 	columnRouter := router.Group("/columns")
 	columnRouter.POST("", columnHandler.CreateColumn)
 	columnRouter.GET("", columnHandler.GetAllColumns)
+
+	taskRouter := router.Group("/tasks")
+	taskRouter.POST("", taskHandler.CreateTask)
 
 	router.Run()
 }
