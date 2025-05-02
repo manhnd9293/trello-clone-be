@@ -5,9 +5,11 @@ import (
 	"log"
 	"net/http"
 	"trello-clone/internal/db"
+	"trello-clone/internal/handlers/columnHandler"
 
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
+	"trello-clone/internal/models"
 )
 
 func init() {
@@ -17,6 +19,7 @@ func init() {
 	}
 	fmt.Println("Initialize project")
 	db.ConnectDb()
+	db.Connection.AutoMigrate(&models.Column{})
 }
 
 func main() {
@@ -27,7 +30,8 @@ func main() {
 		})
 	})
 
-	// columnRouter := router.Group("column")
+	columnRouter := router.Group("/column")
+	columnRouter.POST("", columnHandler.CreateColumn)
 
 	router.Run()
 }

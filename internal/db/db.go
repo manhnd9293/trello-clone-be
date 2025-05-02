@@ -9,7 +9,7 @@ import (
 	"gorm.io/gorm"
 )
 
-var Db *gorm.DB
+var Connection *gorm.DB
 
 func ConnectDb() {
 
@@ -21,5 +21,5 @@ func ConnectDb() {
 
 	fmt.Println("Connect to db successs")
 
-	Db = db
+	Connection = db
 }
