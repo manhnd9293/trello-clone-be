@@ -6,10 +6,11 @@ import (
 	"net/http"
 	"trello-clone/internal/db"
 	"trello-clone/internal/handlers/columnHandler"
+	"trello-clone/internal/models"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
-	"trello-clone/internal/models"
 )
 
 func init() {
@@ -29,9 +30,11 @@ func main() {
 			"message": "pong ping",
 		})
 	})
+	router.Use(cors.Default())
 
-	columnRouter := router.Group("/column")
+	columnRouter := router.Group("/columns")
 	columnRouter.POST("", columnHandler.CreateColumn)
+	columnRouter.GET("", columnHandler.GetAllColumns)
 
 	router.Run()
 }

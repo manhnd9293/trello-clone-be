@@ -29,3 +29,14 @@ func CreateColumn(c *gin.Context) {
 
 	c.JSON(http.StatusCreated, newColumn)
 }
+
+func GetAllColumns(c *gin.Context) {
+	var columns []models.Column
+	result := db.Connection.Find(&columns)
+	if result.Error != nil {
+		c.JSON(http.StatusBadRequest, result.Error)
+		return
+	}
+
+	c.JSON(http.StatusAccepted, columns)
+}
