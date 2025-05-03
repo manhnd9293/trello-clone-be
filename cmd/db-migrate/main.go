@@ -17,5 +17,5 @@ func init() {
 }
 
 func main() {
-	db.Connection.AutoMigrate(&models.Column{})
+	db.Db.AutoMigrate(&models.Column{})
 }

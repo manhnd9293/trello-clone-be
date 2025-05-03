@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"trello-clone/internal/db"
 	"trello-clone/internal/handlers/columnHandler"
 	"trello-clone/internal/handlers/taskHandler"
+	"trello-clone/internal/initializer"
 
 	"trello-clone/internal/models"
 
@@ -21,8 +21,8 @@ func init() {
 		log.Fatal("Failed to load environment variables")
 	}
 	fmt.Println("Initialize project")
-	db.ConnectDb()
-	db.Connection.AutoMigrate(&models.Column{}, &models.Task{})
+	initializer.ConnectDb()
+	initializer.Db.AutoMigrate(&models.Column{}, &models.Task{})
 }
 
 func main() {
@@ -40,6 +40,7 @@ func main() {
 
 	taskRouter := router.Group("/tasks")
 	taskRouter.POST("", taskHandler.CreateTask)
+	taskRouter.PATCH("/position", taskHandler.UpdateTaskPosition)
 
 	router.Run()
 }

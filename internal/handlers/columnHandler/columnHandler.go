@@ -2,11 +2,14 @@ package columnHandler
 
 import (
 	"net/http"
-	"trello-clone/internal/db"
+
+	"trello-clone/internal/initializer"
+
 	"trello-clone/internal/models"
 
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
+	"gorm.io/gorm"
 )
 
 func CreateColumn(c *gin.Context) {
@@ -18,9 +21,11 @@ func CreateColumn(c *gin.Context) {
 		})
 		return
 	}
+	var countColunm int64
+	initializer.Db.Model(&models.Column{}).Count(&countColunm)
 
-	newColumn := models.Column{Name: data.Name}
-	result := db.Connection.Create(&newColumn)
+	newColumn := models.Column{Name: data.Name, Position: int(countColunm)}
+	result := initializer.Db.Create(&newColumn)
 
 	if result.Error != nil {
 		c.JSON(http.StatusBadRequest, result.Error)
@@ -32,9 +37,11 @@ func CreateColumn(c *gin.Context) {
 
 func GetAllColumns(c *gin.Context) {
 	var columns []models.Column
-	result := db.Connection.Find(&columns)
+	result := initializer.Db.Preload("Tasks", func(db *gorm.DB) *gorm.DB {
+		return db.Order("tasks.position ASC")
+	}).Order("position ASC").Find(&columns)
 	if result.Error != nil {
-		c.JSON(http.StatusBadRequest, result.Error)
+		c.JSON(http.StatusBadRequest, result.Error.Error())
 		return
 	}
 
