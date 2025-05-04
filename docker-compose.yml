@@ -9,3 +9,8 @@ services:
       - POSTGRES_USER=admin
       - POSTGRES_PASSWORD=admin
       - POSTGRES_DB=trello-clone
+    volumes:
+      - db_data:/var/lib/postgressql/data
+
+volumes:
+  db_data:

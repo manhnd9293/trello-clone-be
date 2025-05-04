@@ -18,6 +18,7 @@ import (
 func init() {
 	err := godotenv.Load()
 	if err != nil {
+		fmt.Printf("Error load env: %v", err.Error())
 		log.Fatal("Failed to load environment variables")
 	}
 	fmt.Println("Initialize project")
